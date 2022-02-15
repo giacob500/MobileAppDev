@@ -6,19 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="fill_parent"
-        android:layout_height="28dp"
-        android:layout_marginTop="50dp"
-        android:gravity="center_horizontal"
-        android:text="@string/LandmarksTitle"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
 
 
-    <RadioGroup
+<RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,7 +44,7 @@
         app:srcCompat="@drawable/flag"
         tools:layout_editor_absoluteX="185dp"
         tools:layout_editor_absoluteY="364dp"
-        />
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/button"
@@ -62,6 +52,7 @@
         android:layout_height="wrap_content"
         android:text="Button"
         tools:layout_editor_absoluteX="158dp"
-        tools:layout_editor_absoluteY="364dp" />
+        tools:layout_editor_absoluteY="364dp"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
