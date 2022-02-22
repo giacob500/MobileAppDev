@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">DownloadImageProgress</string>
+    <string name="progress_button">"Start Progress"</string>
+    <string name="progress_loading">"Loading..."</string>
+    <string name="progress_done">"Done"</string>
+
+    <string name="download_heading">"Download Heading”</string>
+    <string name="download_button">"Download Image”</string>
+    <string name="download_button2">"Download Image 2”</string>
+    <string name="download_dialog_title">"DownloadTask is running"</string>
+    <string name="download_dialog_message">"Downloading image..."</string>
+
+    <string name="napier_logo_url">"https://applications2.napier.ac.uk/Service-Status/content/Images/Edinburgh-Napier-University-logo.png"</string>
+    <string name="download_url_napier_logo">https://media.glassdoor.com/sqll/214391/edinburgh-napier-university-squarelogo.png</string>
+    <string name="download_url_napier_chancellor"><![CDATA[https://www.napier.ac.uk/~/media/500x360/will-whitehorn-500-x-500.jpg?h=500&la=en&w=500&hash=7D03582128B38CAE8F60A8F7E4384CE580AA25CF]]></string>
+</resources>
