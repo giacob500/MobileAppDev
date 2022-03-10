@@ -10,8 +10,10 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.supermarketapp.ui.SupermarketsHelperClass;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -26,6 +28,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
     }
 
+    // old attempt for database - DOESN'T WORK
     public void buttonPressed(View view) {
         Context context = getApplicationContext();
         CharSequence text = "Data uploaded";
@@ -83,7 +88,12 @@ public class MainActivity extends AppCompatActivity {
         toast.show();
     }
 
+    // upload data on database
     public void buttonPressed2(View view) {
+        Context context = getApplicationContext();
+        CharSequence text = "Data uploaded";
+        int duration = Toast.LENGTH_SHORT;
+
         // Create a new user with a first and last name
         Map<String, Object> user = new HashMap<>();
         user.put("first", "Ada");
@@ -103,6 +113,27 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error adding document", e);
+                    }
+                });
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+
+    }
+
+    // check data on database
+    public void buttonPressed3(View view) {
+        db.collection("users")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, "oooo: " + document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
                     }
                 });
     }
