@@ -25,6 +25,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.supermarketapp.databinding.ActivityMainBinding;
 import com.google.firebase.database.DatabaseReference;
@@ -44,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
 
     Button button;
     FirebaseFirestore db;
+
+    // storing images and descriptions in list RecyclerView https://youtu.be/18VcnYN5_LM?t=285
+    RecyclerView recyclerView;
+    String s1[], s2[];
+    int images[] = {R.drawable.first_leaflet, R.drawable.second_leaflet};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize Cloud Firestore
         db = FirebaseFirestore.getInstance();
+
+        recyclerView = findViewById(R.id.leaflets_list);
+        s1 = getResources().getStringArray(R.array.leaflets);
+        s2 = getResources().getStringArray(R.array.description);
     }
 
     // old attempt for database - DOESN'T WORK
