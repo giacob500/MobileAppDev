@@ -75,7 +75,14 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.leaflets_list);
         s1 = getResources().getStringArray(R.array.leaflets);
         s2 = getResources().getStringArray(R.array.description);
+<<<<<<< HEAD
 >>>>>>> parent of f3bed88 (Revert "Revert "List of leaflets created, doesn't work"")
+=======
+
+        MyAdapter myAdapter = new MyAdapter(this, s1, s2, images);
+        recyclerView.setAdapter(myAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+>>>>>>> parent of e8eb92f (Revert "List of leaflets created, doesn't work")
     }
 
     // old attempt for database - DOESN'T WORK

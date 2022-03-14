@@ -14,7 +14,11 @@
         <entry key="..\:/Users/giaco/Documents/GitHub/MobileAppDev/SupermarketApp/app/src/main/res/layout/fragment_first_leaflet.xml" value="0.264" />
         <entry key="..\:/Users/giaco/Documents/GitHub/MobileAppDev/SupermarketApp/app/src/main/res/layout/fragment_home.xml" value="0.264" />
         <entry key="..\:/Users/giaco/Documents/GitHub/MobileAppDev/SupermarketApp/app/src/main/res/layout/fragment_notifications.xml" value="0.16259057971014493" />
+<<<<<<< HEAD
         <entry key="..\:/Users/giaco/Documents/GitHub/MobileAppDev/SupermarketApp/app/src/main/res/layout/my_row.xml" value="0.536" />
+=======
+        <entry key="..\:/Users/giaco/Documents/GitHub/MobileAppDev/SupermarketApp/app/src/main/res/layout/my_row.xml" value="0.264" />
+>>>>>>> parent of e8eb92f (Revert "List of leaflets created, doesn't work")
       </map>
     </option>
   </component>
