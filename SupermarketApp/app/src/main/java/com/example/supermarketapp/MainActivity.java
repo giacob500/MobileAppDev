@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.supermarketapp.ui.MyAdapter;
 import com.example.supermarketapp.ui.SupermarketsHelperClass;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -26,7 +25,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.supermarketapp.databinding.ActivityMainBinding;
@@ -78,10 +76,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.leaflets_list);
         s1 = getResources().getStringArray(R.array.leaflets);
         s2 = getResources().getStringArray(R.array.description);
-
-        MyAdapter myAdapter = new MyAdapter(this, s1, s2, images);
-        recyclerView.setAdapter(myAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     // old attempt for database - DOESN'T WORK
