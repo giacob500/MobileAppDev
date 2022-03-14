@@ -69,6 +69,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize Cloud Firestore
         db = FirebaseFirestore.getInstance();
+<<<<<<< HEAD
+=======
+
+        recyclerView = findViewById(R.id.leaflets_list);
+        s1 = getResources().getStringArray(R.array.leaflets);
+        s2 = getResources().getStringArray(R.array.description);
+>>>>>>> parent of f3bed88 (Revert "Revert "List of leaflets created, doesn't work"")
     }
 
     // old attempt for database - DOESN'T WORK
