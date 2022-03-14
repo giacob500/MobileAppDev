@@ -48,11 +48,6 @@ public class MainActivity extends AppCompatActivity {
     Button button;
     FirebaseFirestore db;
 
-    // storing images and descriptions in list RecyclerView https://youtu.be/18VcnYN5_LM?t=285
-    RecyclerView recyclerView;
-    String s1[], s2[];
-    int images[] = {R.drawable.first_leaflet, R.drawable.second_leaflet};
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,14 +69,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize Cloud Firestore
         db = FirebaseFirestore.getInstance();
-
-        recyclerView = findViewById(R.id.leaflets_list);
-        s1 = getResources().getStringArray(R.array.leaflets);
-        s2 = getResources().getStringArray(R.array.description);
-
-        MyAdapter myAdapter = new MyAdapter(this, s1, s2, images);
-        recyclerView.setAdapter(myAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     // old attempt for database - DOESN'T WORK
