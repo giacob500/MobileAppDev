@@ -2,6 +2,7 @@ package com.example.supermarketapp.ui.dashboard;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -91,9 +92,19 @@ public class DashboardFragment extends Fragment {
         Drawable drawable = getResources().getDrawable(R.drawable.second_leaflet);
 
         l2.setImage(drawable);
-
-
         testdata.add(l2);
+
+        for (int i = 0; i < 200; i++) {
+            l2 = new Leaflet();
+            l2.setTitle(i + "Second leaflet - 17/03-21/03");
+            l2.setDescription("Weekly Leaflet");
+
+
+            drawable = getResources().getDrawable(R.drawable.second_leaflet);
+
+            l2.setImage(drawable);
+            testdata.add(l2);
+        }
 
         return testdata;
 
@@ -128,8 +139,14 @@ public class DashboardFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            //System.out.println(position);
+            System.out.println(position);
             holder.leaflet_title_txt.setText(leaflets.get(position).getTitle());
+            if (position < 3) {
+                holder.leaflet_title_txt.setBackgroundColor(Color.RED);
+            } else {
+                // If you comment the following line you can see the refreshing
+                holder.leaflet_title_txt.setBackgroundColor(Color.GRAY);
+            }
             holder.myImage.setImageDrawable(leaflets.get(position).getImage());
             //holder.myText2.setText(data2[position]);
            // holder.myImage.setImageResource(images[position]);
