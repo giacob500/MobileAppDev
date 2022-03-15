@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.supermarketapp.ui.MyAdapter;
 import com.example.supermarketapp.ui.SupermarketsHelperClass;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -49,10 +48,7 @@ public class MainActivity extends AppCompatActivity {
     Button button;
     FirebaseFirestore db;
 
-    // storing images and descriptions in list RecyclerView https://youtu.be/18VcnYN5_LM?t=285
-    RecyclerView recyclerView;
-    String s1[], s2[];
-    int images[] = {R.drawable.first_leaflet, R.drawable.second_leaflet};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,18 +72,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialize Cloud Firestore
         db = FirebaseFirestore.getInstance();
 
-        recyclerView = findViewById(R.id.leaflets_list);
-        s1 = getResources().getStringArray(R.array.leaflets);
-        s2 = getResources().getStringArray(R.array.description);
 
-        MyAdapter myAdapter = new MyAdapter(detailsList, new MyAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(Call.Details details) {
-                showToast(details.);
-            }
-        });
-        recyclerView.setAdapter(myAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void showToast(String message){
