@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.telecom.Call;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -79,9 +80,18 @@ public class MainActivity extends AppCompatActivity {
         s1 = getResources().getStringArray(R.array.leaflets);
         s2 = getResources().getStringArray(R.array.description);
 
-        MyAdapter myAdapter = new MyAdapter(this, s1, s2, images);
+        MyAdapter myAdapter = new MyAdapter(detailsList, new MyAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(Call.Details details) {
+                showToast(details.);
+            }
+        });
         recyclerView.setAdapter(myAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void showToast(String message){
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     // old attempt for database - DOESN'T WORK
