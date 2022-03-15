@@ -1,12 +1,15 @@
 package com.example.supermarketapp.ui.dashboard;
 
 import static android.content.ContentValues.TAG;
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +32,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.supermarketapp.R;
 import com.example.supermarketapp.databinding.FragmentDashboardBinding;
 import com.example.supermarketapp.ui.Leaflet;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -43,6 +50,9 @@ public class DashboardFragment extends Fragment {
     private FragmentDashboardBinding binding;
 
     RecyclerView recyclerView;
+    FirebaseStorage firebaseStorage;
+    StorageReference storageReference;
+    StorageReference ref;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -133,6 +143,20 @@ public class DashboardFragment extends Fragment {
             holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    storageReference = firebaseStorage.getInstance().getReference();
+                    //ref = storageReference.child("leaflets/" + leaflets.get(position).getTitle() + ".pdf");
+                    ref = storageReference.child("leaflets/10-03-16-03.pdf");
+                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            downloadFile(getContext(), "10-03-16-03", ".pdf", DIRECTORY_DOWNLOADS, uri.toString());
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                        }
+                    });
                     Toast toast = Toast.makeText(getContext(), "Leaflet downloaded", Toast.LENGTH_SHORT);
                     toast.show();
                 }
@@ -157,6 +181,17 @@ public class DashboardFragment extends Fragment {
                 myImage = itemView.findViewById(R.id.leaflet_imageView);
                 constraintLayout = itemView.findViewById(R.id.constraint_layout);
             }
+        }
+
+        public void downloadFile(Context context, String fileName, String fileExtension, String destinationDirectory, String url){
+            DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+            Uri uri = Uri.parse(url);
+            DownloadManager.Request request = new DownloadManager.Request(uri);
+
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            request.setDestinationInExternalFilesDir(context, destinationDirectory, fileName + fileExtension);
+
+            downloadManager.enqueue(request);
         }
     }
 }
