@@ -20,7 +20,7 @@
 
             <ImageView
                 android:id="@+id/leaflet_imageView"
-                android:layout_width="150dp"
+                android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +35,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="35dp"
                 android:text="Title"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/leaflet_imageView"
                 app:layout_constraintTop_toTopOf="parent" />

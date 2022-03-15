@@ -1,10 +1,13 @@
 package com.example.supermarketapp.ui.dashboard;
 
+import static android.content.ContentValues.TAG;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +38,6 @@ public class DashboardFragment extends Fragment {
     private DashboardViewModel dashboardViewModel;
     private FragmentDashboardBinding binding;
 
-    // storing images and descriptions in list RecyclerView https://youtu.be/18VcnYN5_LM?t=285
     RecyclerView recyclerView;
     String s1[], s2[];
     int images[] = {R.drawable.first_leaflet, R.drawable.second_leaflet};
@@ -47,14 +49,6 @@ public class DashboardFragment extends Fragment {
 
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
-        final TextView textView = binding.textDashboard;
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
 
         recyclerView = root.findViewById(R.id.leaflets_list);
        // s1 = getResources().getStringArray(R.array.leaflets);
@@ -69,43 +63,35 @@ public class DashboardFragment extends Fragment {
 
     private List<Leaflet> createTestData() {
         ArrayList<Leaflet> testdata = new ArrayList<>();
+
         Leaflet l1 = new Leaflet();
-        l1.setTitle("First leaflet - 10/03-16/03");
+        l1.setTitle("10/03-16/03");
         l1.setDescription("Weekly Leaflet");
 
-        try {
-            Drawable drawable = getResources().getDrawable(R.drawable.first_leaflet);
-
-            l1.setImage(drawable);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        testdata.add(l1);
-
         Leaflet l2 = new Leaflet();
-        l2.setTitle("Second leaflet - 17/03-21/03");
+        l2.setTitle("17/03-21/03 ");
         l2.setDescription("Weekly Leaflet");
 
+        Drawable drawable = getResources().getDrawable(R.drawable.first_leaflet);
+        l1.setImage(drawable);
+        testdata.add(l1);
 
-        Drawable drawable = getResources().getDrawable(R.drawable.second_leaflet);
-
+        drawable = getResources().getDrawable(R.drawable.second_leaflet);
         l2.setImage(drawable);
         testdata.add(l2);
+/*
+        // Code to use for undefined number of leaflets
+        Leaflet lSample = new Leaflet();
+        Drawable drawable;
 
-        for (int i = 0; i < 200; i++) {
-            l2 = new Leaflet();
-            l2.setTitle(i + "Second leaflet - 17/03-21/03");
-            l2.setDescription("Weekly Leaflet");
-
-
-            drawable = getResources().getDrawable(R.drawable.second_leaflet);
-
-            l2.setImage(drawable);
-            testdata.add(l2);
+        for (int i = 0; i < 2; i++) {
+            lSample.setTitle("Date");
+            lSample.setDescription("Description");
+            drawable = getResources().getDrawable(R.drawable.first_leaflet);
+            lSample.setImage(drawable);
+            testdata.add(lSample);
         }
-
+*/
         return testdata;
 
     }
@@ -141,12 +127,6 @@ public class DashboardFragment extends Fragment {
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             System.out.println(position);
             holder.leaflet_title_txt.setText(leaflets.get(position).getTitle());
-            if (position < 3) {
-                holder.leaflet_title_txt.setBackgroundColor(Color.RED);
-            } else {
-                // If you comment the following line you can see the refreshing
-                holder.leaflet_title_txt.setBackgroundColor(Color.GRAY);
-            }
             holder.myImage.setImageDrawable(leaflets.get(position).getImage());
             //holder.myText2.setText(data2[position]);
            // holder.myImage.setImageResource(images[position]);

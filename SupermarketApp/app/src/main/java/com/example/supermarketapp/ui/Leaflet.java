@@ -9,7 +9,6 @@ public class Leaflet {
     private String title;
     private String description;
 
-
     public Drawable getImage() {
         return image;
     }
