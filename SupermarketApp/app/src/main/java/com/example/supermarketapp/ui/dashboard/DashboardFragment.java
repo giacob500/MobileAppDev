@@ -2,6 +2,7 @@ package com.example.supermarketapp.ui.dashboard;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -12,10 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -39,8 +43,6 @@ public class DashboardFragment extends Fragment {
     private FragmentDashboardBinding binding;
 
     RecyclerView recyclerView;
-    String s1[], s2[];
-    int images[] = {R.drawable.first_leaflet, R.drawable.second_leaflet};
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -51,8 +53,6 @@ public class DashboardFragment extends Fragment {
         View root = binding.getRoot();
 
         recyclerView = root.findViewById(R.id.leaflets_list);
-       // s1 = getResources().getStringArray(R.array.leaflets);
-        s2 = getResources().getStringArray(R.array.description);
 
         MyAdapter myAdapter = new MyAdapter(createTestData());
         recyclerView.setAdapter(myAdapter);
@@ -107,13 +107,9 @@ public class DashboardFragment extends Fragment {
         // Model
         private List<Leaflet> leaflets;
 
-        String data1[], data2[];
-        int images[];
-
         public MyAdapter( List<Leaflet> leaflets){
             this.leaflets = leaflets;
         }
-
 
         @NonNull
         @Override
@@ -134,6 +130,13 @@ public class DashboardFragment extends Fragment {
            // holder.itemView.setOnClickListener(view -> {
                 //mItemListener.onItemClick(detailsList.get(position)); // this will get the position of our item in recyclerview
             //});
+            holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast toast = Toast.makeText(getContext(), "Leaflet downloaded", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            });
         }
 
         @Override
@@ -145,15 +148,16 @@ public class DashboardFragment extends Fragment {
 
             TextView leaflet_title_txt, myText2;
             ImageView myImage;
+            ConstraintLayout constraintLayout;
 
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
                 leaflet_title_txt = itemView.findViewById(R.id.leaflet_title_txt);
                 myText2 = itemView.findViewById(R.id.leaflet_description_txt);
                 myImage = itemView.findViewById(R.id.leaflet_imageView);
+                constraintLayout = itemView.findViewById(R.id.constraint_layout);
             }
         }
     }
-
 }
 
