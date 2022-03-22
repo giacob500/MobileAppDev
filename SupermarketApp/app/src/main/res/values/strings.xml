@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">SupermarketApp</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_leaflets">Leaflets</string>
+    <string name="title_settings">Settings</string>
     <string-array name="leaflets">
         <item>First leaflet - 10/03-16/03
         </item>
