@@ -15,4 +15,6 @@
     </string-array>
     <string name="leaflet1_title">First leaflet - 10/03-16/03</string>
     <string name="leaflet2_title">Second leaflet - 17/03-23/03</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="google_map_key">AIzaSyBKn184bxiYTBQfbfL2XKAvpVTopdV2FAg</string>
 </resources>
