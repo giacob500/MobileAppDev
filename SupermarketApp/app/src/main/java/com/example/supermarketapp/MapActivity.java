@@ -1,10 +1,12 @@
 package com.example.supermarketapp;
 
+import static android.content.ContentValues.TAG;
+
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.example.supermarketapp.databinding.ActivityMapBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -23,23 +24,20 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback{
-    private ActivityMapBinding binding;
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
+    //private ActivityMapBinding binding;
+    FirebaseFirestore db;
     Spinner spType;
     Button btFind;
     SupportMapFragment supportMapFragment;
@@ -50,16 +48,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_map);
 
-        binding = ActivityMapBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        /*binding = ActivityMapBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());*/
 
         // Assign variable
         spType = findViewById(R.id.sp_type);
         btFind = findViewById(R.id.bt_find);
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.google_map);
+        supportMapFragment.getMapAsync(this);
+
+        // Until here the map works and sets a marker on sydeny
+
 
         // Initialize array of place type
         String[] placeTypeList = {"atm", "bank", "hospital", "movie_theater", "restaurant"};
@@ -82,44 +84,37 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             // request permission
             ActivityCompat.requestPermissions(MapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
         }
+
+
+/*// Add missing data
+        Map<String, Object> supermarket = new HashMap<>();
+        supermarket.put("name", "Darly Road");
+        supermarket.put("lat", "55.94142632346264");
+        supermarket.put("lng", "-3.221565654074121");
+        supermarket.put("opening_times", "mon:8.00-22.00");
+
+        db.collection("supermarkets_test")
+                .add(supermarket);*/
+
+
         btFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Get selected position of spinner
-                int i = spType.getSelectedItemPosition();
-                // Initialize url
-                String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json" + // Url
-                        "?location=" + currentLat + "," + currentLong + // Location latitude and longitude
-                        "&radius=5000" + // Nearby radius
-                        "&types=" + placeTypeList[i] + // Place type
-                        "&sensor=true" + //Sensor
-                        "&key=" + getResources().getString(R.string.google_map_key); // Google map key
-
-                // Execute place task method to download json data
-                new PlaceTask().execute(url);
+                // get selected position of marker
 
             }
         });
     }
 
+
     private void getCurrentLocation() {
         // Initialize task location
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
-        task.addOnSuccessListener(new OnSuccessListener<Location>(){
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
-            public void onSuccess(Location location){
+            public void onSuccess(Location location) {
                 //When success
-                if (location != null){
+                if (location != null) {
                     // When location is not equal to null
                     // Get current latitude
                     currentLat = location.getLatitude();
@@ -154,113 +149,39 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        LatLng sydney = new LatLng(-33.852, 151.211);
-        googleMap.addMarker(new MarkerOptions()
-                .position(sydney)
-                .title("Marker in Sydney"));
+        // Initialize Cloud Firestore
+        db = FirebaseFirestore.getInstance();
+
+        // Check if data on Firestore already exist
+        db.collection("supermarkets")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                // if document.getdata != supermarket in the list, add supermarket
+                                Log.d("diocan2", "=>" + document.getData().get("lat"));
+
+                                //String lat = (String) document.getData().get("lat");
+
+                                LatLng supermarket = new LatLng(Double.parseDouble((String) document.getData().get("lat")), Double.parseDouble((String) document.getData().get("lng")));
+
+                                googleMap.addMarker(new MarkerOptions()
+                                        .position(supermarket)
+                                        .title("Supermarket in " + (String) document.getData().get("name")));
+
+                            }
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+
+
+
         // [START_EXCLUDE silent]
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-    }
-
-    private class PlaceTask extends AsyncTask<String, Integer, String> {
-        @Override
-        protected String doInBackground(String... strings) {
-            String data = null;
-            try {
-                // Initialize data
-                data = downloadUrl(strings[0]);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return data;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            // Execute parser task
-            new ParserTask().execute(s);
-        }
-    }
-
-    private String downloadUrl(String string) throws IOException {
-        // Initialize url
-        URL url = new URL(string);
-        // Initialize connection
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        // Connect connection
-        connection.connect();
-        // Initialize input stream
-        InputStream stream = connection.getInputStream();
-        // Initialize buffer
-        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-        // Initialize string builder
-        StringBuilder builder = new StringBuilder();
-        // Initialize string variable
-        String line = "";
-        // Use while loop
-        while ((line = reader.readLine()) != null){
-            // Append line
-            builder.append(line);
-        }
-        // Get append data
-        String data = builder.toString();
-        // Close reader
-        reader.close();
-        // Return data
-        return data;
-    }
-
-    private class ParserTask extends AsyncTask<String,Integer, List<HashMap<String,String>>>{
-        @Override
-        protected List<HashMap<String, String>> doInBackground(String... strings) {
-            // Create json parser class
-            JsonParser jsonParser = new JsonParser();
-            // Initialize hash map list
-            List<HashMap<String, String>> mapList = null;
-            JSONObject object = null;
-            try {
-                // Inizialize json object
-                object = new JSONObject(strings[0]);
-                // Parse json object
-                mapList = jsonParser.parseResult(object);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            // Return map list
-            return mapList;
-
-        }
-
-        @Override
-        protected void onPostExecute(List<HashMap<String, String>> hashMaps) {
-            // Clear map
-            map.clear();
-            // Use for loop
-            for (int i = 0; i < hashMaps.size(); i++){
-                //Initialize hash map
-                HashMap<String, String> hashMapList = hashMaps.get(i);
-                // Get latitude
-                double lat = Double.parseDouble(hashMapList.get("lat"));
-                // Get longitude
-                double lng = Double.parseDouble(hashMapList.get("lng"));
-                // Get name
-                String name = hashMapList.get("name");
-                // Concat latitude and longitude
-                LatLng latLng = new LatLng(lat, lng);
-                LatLng latLng2 = new LatLng(55.94215917371436, -3.220970100003454);
-                // Initialize marker options
-                MarkerOptions options = new MarkerOptions();
-                MarkerOptions options2 = new MarkerOptions();
-                // Set position
-                options.position(latLng);
-                options2.position(latLng2);
-                // Set title
-                options.title(name);
-                options2.title("prova");
-                // Add marker on map
-                map.addMarker(options2);
-                map.addMarker(options);
-            }
-        }
+        //googleMap.moveCamera(CameraUpdateFactory.newLatLng(supermarket));
     }
 }
+
