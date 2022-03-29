@@ -10,37 +10,55 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.supermarketapp.R;
 import com.example.supermarketapp.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
+    //private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
+    private TextView textView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+        /*homeViewModel =
+                new ViewModelProvider(this).get(HomeViewModel.class);*/
+        // Hide actionbar at the top of the screen
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // Hide actionbar at the top of the screen
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 
-        final TextView textView = binding.textHome;
+/*
+        final TextView textView = binding.favouriteSupermarketTextView;
         homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
             }
         });
+*/
 
         return root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        textView = (TextView)getView().findViewById(R.id.favouriteSupermarketTextView);
+        textView.setText("Your favourite supermarket is ");
+/*
+        Button button = getView().findViewById(R.id.choose_supermarket_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+            }
+        });
+        */
+
     }
 
     @Override

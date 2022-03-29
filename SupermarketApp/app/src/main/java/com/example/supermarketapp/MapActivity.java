@@ -24,6 +24,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -45,12 +46,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     FirebaseFirestore db;
     Spinner spType;
     String defaultTextForSpinner = "Select supermarket below";
-    Button btFind;
+    Button btnSelect;
     SupportMapFragment supportMapFragment;
     GoogleMap map;
     FusedLocationProviderClient fusedLocationProviderClient;
     double currentLat = 0, currentLong = 0;
     ArrayList<String> placeNameList;
+    String selectedSupermarket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +63,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         setContentView(binding.getRoot());*/
 
         // Assign variable
+        selectedSupermarket = "";
         spType = findViewById(R.id.sp_type);
-        btFind = findViewById(R.id.bt_find);
+        btnSelect = findViewById(R.id.bt_find);
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.google_map);
         supportMapFragment.getMapAsync(this);
@@ -128,7 +131,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         db.collection("supermarkets_test")
                 .add(supermarket);*/
 
-        btFind.setOnClickListener(new View.OnClickListener() {
+        btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // get selected position of marker
@@ -141,11 +144,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 "&sensor=true" + // Sensor
                 "&key=" + getResources().getString(R.string.google_map_key); // Google map key
 
-                String selectedSupermarket = simpleArray[i];
-                Log.d("prova4", selectedSupermarket);
-
-                // Execute place task method to download json data
-                new PlaceTask().execute(url);
+                ArrayAdapter myAdap = (ArrayAdapter) spType.getAdapter(); //cast to an ArrayAdapter
+                int spinnerPosition = myAdap.getPosition(selectedSupermarket);
+                spType.setSelection(spinnerPosition);
+                //dioboiaseiqui
             }
         });
     }
@@ -172,6 +174,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             map = googleMap;
                             // Zoom current location on map
                             map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLong), 10));
+                            // When marker is pressed
+                            map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                                @Override
+                                public boolean onMarkerClick(@NonNull Marker marker) {
+                                    selectedSupermarket = marker.getTitle();
+                                    return false;
+                                }
+                            });
                         }
                     });
                 }
@@ -207,8 +217,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                                 googleMap.addMarker(new MarkerOptions()
                                         .position(supermarket)
-                                        .title("Supermarket in " + (String) document.getData().get("name")));
-
+                                        .title("" + (String) document.getData().get("name")));
                             }
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
@@ -216,28 +225,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     }
                 });
 
+
         // [START_EXCLUDE silent]
         //googleMap.moveCamera(CameraUpdateFactory.newLatLng(supermarket));
-    }
-
-    private class PlaceTask extends AsyncTask <String, Integer, String>{
-
-        @Override
-        protected String doInBackground(String... strings) {
-            String data = null;
-            try {
-                // Initialize data
-                data = downloadUrl(strings[0]);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return data;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            //Execute parser task
-        }
     }
 
     private String downloadUrl(String string) throws IOException {

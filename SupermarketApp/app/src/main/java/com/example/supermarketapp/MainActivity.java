@@ -12,12 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -26,6 +20,11 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.supermarketapp.databinding.ActivityMainBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
@@ -63,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        button = (Button) findViewById(R.id.button2);
+        button = (Button) findViewById(R.id.choose_supermarket_button);
 
         // Initialize Cloud Firestore
         db = FirebaseFirestore.getInstance();
@@ -146,6 +145,18 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    public void buttonPressed4(View v) {
+        switch(v.getId()) {
+            case R.id.choose_supermarket_button:
+                Intent myIntent = new Intent();
+                myIntent.setClassName("com.example.supermarketapp", "com.example.supermarketapp.MapActivity");
+                // for ex: your package name can be "com.example"
+                // your activity name will be "com.example.Contact_Developer"
+                startActivity(myIntent);
+                break;
+        }
     }
 
     public void downloadPDF1(View view) {
