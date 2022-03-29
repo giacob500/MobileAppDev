@@ -19,6 +19,7 @@ public class HomeFragment extends Fragment {
     //private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
     private TextView textView;
+    // put at the top under oncreate
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public class HomeFragment extends Fragment {
                 new ViewModelProvider(this).get(HomeViewModel.class);*/
         // Hide actionbar at the top of the screen
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -47,9 +49,10 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        //Intent intent = new Intent(get, MainActivity.class);
+        //chosenSupermarket = fetoAmbizioso;
         textView = (TextView)getView().findViewById(R.id.favouriteSupermarketTextView);
-        textView.setText("Your favourite supermarket is ");
+        textView.setText(R.string.chosen_supermarket_textView);
 /*
         Button button = getView().findViewById(R.id.choose_supermarket_button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -67,3 +70,4 @@ public class HomeFragment extends Fragment {
         binding = null;
     }
 }
+

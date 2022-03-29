@@ -44,10 +44,11 @@ public class MainActivity extends AppCompatActivity {
     FirebaseFirestore db;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        String fetoAmbizioso = getIntent().getStringExtra("chosenSupermarket");
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize Cloud Firestore
         db = FirebaseFirestore.getInstance();
+
 
     }
 
@@ -166,4 +168,6 @@ public class MainActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
     }
+
+
 }

@@ -3,6 +3,7 @@ package com.example.supermarketapp;
 import static android.content.ContentValues.TAG;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -53,6 +54,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     double currentLat = 0, currentLong = 0;
     ArrayList<String> placeNameList;
     String selectedSupermarket;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +150,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 int spinnerPosition = myAdap.getPosition(selectedSupermarket);
                 spType.setSelection(spinnerPosition);
                 //dioboiaseiqui
+
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("chosenSupermarket", R.string.chosen_supermarket_textView + selectedSupermarket);
+
+                Intent intent2 = new Intent(getApplicationContext(), MainActivity.class);// New activity
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish(); // Call once you redirect to another activity
+                /*
+                Intent myIntent = new Intent();
+                myIntent.setClassName("com.example.supermarketapp", "com.example.supermarketapp.MainActivity");
+                // for ex: your package name can be "com.example"
+                // your activity name will be "com.example.Contact_Developer"
+                startActivity(myIntent);
+                */
             }
         });
     }

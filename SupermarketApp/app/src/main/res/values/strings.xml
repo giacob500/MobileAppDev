@@ -3,7 +3,7 @@
     <string name="title_home">Home</string>
     <string name="title_leaflets">Leaflets</string>
     <string name="title_settings">Settings</string>
-    <string name="chosen_supermarket_textView">Your supermarket is</string>
+    <string name="chosen_supermarket_textView">Your supermarket is </string>
     <string-array name="leaflets">
         <item>First leaflet - 10/03-16/03
         </item>
