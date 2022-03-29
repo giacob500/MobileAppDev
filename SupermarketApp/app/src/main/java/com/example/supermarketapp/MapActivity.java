@@ -152,7 +152,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 //dioboiaseiqui
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra("chosenSupermarket", R.string.chosen_supermarket_textView + selectedSupermarket);
+                intent.putExtra("chosenSupermarket", getString(R.string.chosen_supermarket_textView) + " " + selectedSupermarket);
 
                 Intent intent2 = new Intent(getApplicationContext(), MainActivity.class);// New activity
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
