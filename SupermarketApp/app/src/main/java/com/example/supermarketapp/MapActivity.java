@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,19 +32,25 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
     //private ActivityMapBinding binding;
     FirebaseFirestore db;
     Spinner spType;
+    String defaultTextForSpinner = "Select supermarket below";
     Button btFind;
     SupportMapFragment supportMapFragment;
     GoogleMap map;
     FusedLocationProviderClient fusedLocationProviderClient;
     double currentLat = 0, currentLong = 0;
+    ArrayList<String> placeNameList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,16 +67,42 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.google_map);
         supportMapFragment.getMapAsync(this);
 
-        // Until here the map works and sets a marker on sydeny
-
-
-        // Initialize array of place type
-        String[] placeTypeList = {"atm", "bank", "hospital", "movie_theater", "restaurant"};
         // Initialize array of place name
-        String[] placeNameList = {"ATM", "Bank", "Hospital", "Movie Theater", "Restaurant"};
+        placeNameList = new ArrayList<String>();
 
-        // Set adapter on spinner
-        spType.setAdapter(new ArrayAdapter<>(MapActivity.this, android.R.layout.simple_spinner_dropdown_item, placeNameList));
+        String[] simpleArray = {"Broughton", "Slateford Road", "Darly Road", "Edinburgh Easter Road", "Leith", "Leven", "Whitburn", "Granton", "Nicolson St"};
+
+// Initialize Cloud Firestore
+        db = FirebaseFirestore.getInstance();
+        /*
+        if (placeNameList.isEmpty()){
+            db.collection("supermarkets")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d("prova3", placeNameList.toString());
+                                    placeNameList.add((String)document.get("name"));
+                                }
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
+                            Log.d("prova3", "FINE: " + placeNameList.toString());
+                        }
+                    });
+        }
+       // Log.d("prova3", "yo");
+// Convert ArrayList<String> in string[]
+        simpleArray = new String[ placeNameList.size() ];
+        placeNameList.toArray( simpleArray );
+        for(int i = 0; i < simpleArray.length; i++){
+            Log.d("prova3", simpleArray[i]);
+        }*/
+       // Log.d("prova3", String.valueOf(simpleArray.length) + " " + placeNameList.size());
+// Set adapter on spinner
+        spType.setAdapter(new ArrayAdapter<>(MapActivity.this, android.R.layout.simple_spinner_dropdown_item, simpleArray));
 
         // Initialize fused Location provider client
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -85,7 +118,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             ActivityCompat.requestPermissions(MapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
         }
 
-
 /*// Add missing data
         Map<String, Object> supermarket = new HashMap<>();
         supermarket.put("name", "Darly Road");
@@ -96,12 +128,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         db.collection("supermarkets_test")
                 .add(supermarket);*/
 
-
         btFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // get selected position of marker
+                int i = spType.getSelectedItemPosition();
+                // Initialize url
+                String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json" +  // Url
+                "?location=" + currentLat + "," + currentLong + // Location latitude and longitude
+                "&radius=5000" + // Nearby radius
+                "&types=" + simpleArray[i] + // Place type
+                "&sensor=true" + // Sensor
+                "&key=" + getResources().getString(R.string.google_map_key); // Google map key
 
+                String selectedSupermarket = simpleArray[i];
+                Log.d("prova4", selectedSupermarket);
+
+                // Execute place task method to download json data
+                new PlaceTask().execute(url);
             }
         });
     }
@@ -149,8 +193,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        // Initialize Cloud Firestore
-        db = FirebaseFirestore.getInstance();
 
         // Check if data on Firestore already exist
         db.collection("supermarkets")
@@ -160,11 +202,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                // if document.getdata != supermarket in the list, add supermarket
-                                Log.d("diocan2", "=>" + document.getData().get("lat"));
-
-                                //String lat = (String) document.getData().get("lat");
-
+                                //placeNameList.add((String) document.getData().get("name"));
                                 LatLng supermarket = new LatLng(Double.parseDouble((String) document.getData().get("lat")), Double.parseDouble((String) document.getData().get("lng")));
 
                                 googleMap.addMarker(new MarkerOptions()
@@ -178,10 +216,56 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     }
                 });
 
-
-
         // [START_EXCLUDE silent]
         //googleMap.moveCamera(CameraUpdateFactory.newLatLng(supermarket));
+    }
+
+    private class PlaceTask extends AsyncTask <String, Integer, String>{
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String data = null;
+            try {
+                // Initialize data
+                data = downloadUrl(strings[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            //Execute parser task
+        }
+    }
+
+    private String downloadUrl(String string) throws IOException {
+        // Initialize url
+        URL url = new URL(string);
+        // Initialize connection
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        // Connect connection
+        connection.connect();
+        // Initialize input stream
+        InputStream stream = connection.getInputStream();
+        // Initialize buffer reader
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        // Initialize string builder
+        StringBuilder builder = new StringBuilder();
+        // Initialize string variable
+        String line = "";
+        // Use while loop
+        while ((line = reader.readLine()) != null){
+            // Append line
+            builder.append(line);
+        }
+        // Get append data
+        String data = builder.toString();
+        // Close reader
+        reader.close();
+        // Return data
+        return data;
     }
 }
 
