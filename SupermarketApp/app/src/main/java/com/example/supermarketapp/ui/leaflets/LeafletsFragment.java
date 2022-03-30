@@ -18,13 +18,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.supermarketapp.R;
 import com.example.supermarketapp.databinding.FragmentLeafletsBinding;
-import com.example.supermarketapp.ui.Leaflet;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -36,7 +34,6 @@ import java.util.List;
 
 public class LeafletsFragment extends Fragment {
 
-    private LeafletsViewModel leafletsViewModel;
     private FragmentLeafletsBinding binding;
 
     RecyclerView recyclerView;
@@ -46,8 +43,6 @@ public class LeafletsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        leafletsViewModel =
-                new ViewModelProvider(this).get(LeafletsViewModel.class);
 
         binding = FragmentLeafletsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -118,15 +113,16 @@ public class LeafletsFragment extends Fragment {
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            View view = inflater.inflate(R.layout.my_row, parent, false);
+            View view = inflater.inflate(R.layout.single_leaflet, parent, false);
             return new MyViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             System.out.println(position);
-            holder.leaflet_title_txt.setText(leaflets.get(position).getTitle());
-            holder.myImage.setImageDrawable(leaflets.get(position).getImage());
+            holder.leafletTitle.setText(leaflets.get(position).getTitle());
+            holder.leafletDescription.setText(leaflets.get(position).getDescription());
+            holder.leafletThumbnail.setImageDrawable(leaflets.get(position).getImage());
             //holder.myText2.setText(data2[position]);
            // holder.myImage.setImageResource(images[position]);
 
@@ -163,15 +159,15 @@ public class LeafletsFragment extends Fragment {
 
         public class MyViewHolder extends RecyclerView.ViewHolder{
 
-            TextView leaflet_title_txt, myText2;
-            ImageView myImage;
+            TextView leafletTitle, leafletDescription;
+            ImageView leafletThumbnail;
             ConstraintLayout constraintLayout;
 
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
-                leaflet_title_txt = itemView.findViewById(R.id.leaflet_title_txt);
-                myText2 = itemView.findViewById(R.id.leaflet_description_txt);
-                myImage = itemView.findViewById(R.id.leaflet_imageView);
+                leafletTitle = itemView.findViewById(R.id.leaflet_title_txt);
+                leafletDescription = itemView.findViewById(R.id.leaflet_description_txt);
+                leafletThumbnail = itemView.findViewById(R.id.leaflet_imageView);
                 constraintLayout = itemView.findViewById(R.id.constraint_layout);
             }
         }

@@ -1,13 +1,12 @@
-package com.example.supermarketapp.ui;
+package com.example.supermarketapp.ui.leaflets;
 
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 
 public class Leaflet {
 
     private String title;
     private String description;
+    private Drawable image;
 
     public Drawable getImage() {
         return image;
@@ -16,8 +15,6 @@ public class Leaflet {
     public void setImage(Drawable image) {
         this.image = image;
     }
-
-    private Drawable image;
 
     public String getTitle() {
         return title;

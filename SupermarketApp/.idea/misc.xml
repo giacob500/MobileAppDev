@@ -15,6 +15,7 @@
         <entry key="..\:/Users/giaco/Documents/GitHub/MobileAppDev/SupermarketApp/app/src/main/res/layout/activity_main.xml" value="0.136" />
         <entry key="..\:/Users/giaco/Documents/GitHub/MobileAppDev/SupermarketApp/app/src/main/res/layout/activity_map.xml" value="0.264" />
         <entry key="..\:/Users/giaco/Documents/GitHub/MobileAppDev/SupermarketApp/app/src/main/res/layout/activity_maps.xml" value="0.176" />
+        <entry key="..\:/Users/giaco/Documents/GitHub/MobileAppDev/SupermarketApp/app/src/main/res/layout/fragment_coupons.xml" value="0.2222222222222222" />
         <entry key="..\:/Users/giaco/Documents/GitHub/MobileAppDev/SupermarketApp/app/src/main/res/layout/fragment_dashboard.xml" value="0.136" />
         <entry key="..\:/Users/giaco/Documents/GitHub/MobileAppDev/SupermarketApp/app/src/main/res/layout/fragment_first_leaflet.xml" value="0.264" />
         <entry key="..\:/Users/giaco/Documents/GitHub/MobileAppDev/SupermarketApp/app/src/main/res/layout/fragment_home.xml" value="0.2" />
@@ -22,6 +23,8 @@
         <entry key="..\:/Users/giaco/Documents/GitHub/MobileAppDev/SupermarketApp/app/src/main/res/layout/fragment_notifications.xml" value="0.16259057971014493" />
         <entry key="..\:/Users/giaco/Documents/GitHub/MobileAppDev/SupermarketApp/app/src/main/res/layout/map_activity.xml" value="0.11296296296296296" />
         <entry key="..\:/Users/giaco/Documents/GitHub/MobileAppDev/SupermarketApp/app/src/main/res/layout/my_row.xml" value="0.4" />
+        <entry key="..\:/Users/giaco/Documents/GitHub/MobileAppDev/SupermarketApp/app/src/main/res/layout/single_coupon.xml" value="0.536" />
+        <entry key="..\:/Users/giaco/Documents/GitHub/MobileAppDev/SupermarketApp/app/src/main/res/layout/single_leaflet.xml" value="0.13287037037037036" />
         <entry key="..\:/Users/giaco/Documents/GitHub/MobileAppDev/SupermarketApp/app/src/main/res/menu/bottom_nav_menu.xml" value="0.2222222222222222" />
       </map>
     </option>

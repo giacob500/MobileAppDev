@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
         button = (Button) findViewById(R.id.choose_supermarket_button);
 
+
         // Initialize Cloud Firestore
         db = FirebaseFirestore.getInstance();
 
@@ -146,6 +147,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(myIntent);
                 break;
         }
+    }
+
+    public void activateCoupon(View v){
+        Button activateCouponButton = (Button) findViewById(R.id.activateCouponButton);
+        if(activateCouponButton.getText().equals("Activate"))
+            activateCouponButton.setText("Activated");
+        else
+            activateCouponButton.setText("Activate");
+        Log.d("prova5", "funzia");
+
     }
 
     public void downloadPDF1(View view) {
