@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
         fetoAmbizioso = getIntent().getStringExtra("chosenSupermarket");
 
+
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_leaflets, R.id.navigation_settings)
+                R.id.navigation_home, R.id.navigation_leaflets, R.id.navigation_coupons)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -64,7 +66,9 @@ public class MainActivity extends AppCompatActivity {
         // Initialize Cloud Firestore
         db = FirebaseFirestore.getInstance();
 
-
+        Bundle data = new Bundle();
+        data.putString("myData", "Hello from MainActivity");
+        //.setArguments()
     }
 
     private void showToast(String message){

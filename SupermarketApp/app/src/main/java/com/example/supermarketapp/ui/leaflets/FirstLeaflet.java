@@ -1,6 +1,5 @@
-package com.example.supermarketapp.ui.dashboard;
+package com.example.supermarketapp.ui.leaflets;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;

@@ -1,16 +1,14 @@
-package com.example.supermarketapp.ui.dashboard;
+package com.example.supermarketapp.ui.leaflets;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.supermarketapp.R;
-
-public class DashboardViewModel extends ViewModel {
+public class LeafletsViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public DashboardViewModel() {
+    public LeafletsViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is dashboard fragment");
     }

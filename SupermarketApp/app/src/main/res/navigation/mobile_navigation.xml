@@ -13,13 +13,13 @@
 
     <fragment
         android:id="@+id/navigation_leaflets"
-        android:name="com.example.supermarketapp.ui.dashboard.DashboardFragment"
+        android:name="com.example.supermarketapp.ui.leaflets.LeafletsFragment"
         android:label="@string/title_leaflets"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_leaflets" />
 
     <fragment
-        android:id="@+id/navigation_settings"
-        android:name="com.example.supermarketapp.ui.notifications.NotificationsFragment"
-        android:label="@string/title_settings"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_coupons"
+        android:name="com.example.supermarketapp.ui.coupons.CouponsFragment"
+        android:label="@string/title_coupons"
+        tools:layout="@layout/fragment_coupons" />
 </navigation>

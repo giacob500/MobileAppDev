@@ -19,6 +19,7 @@ public class HomeFragment extends Fragment {
     //private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
     private TextView textView;
+    private String fetoAmbizioso2;
     // put at the top under oncreate
 
     public View onCreateView(@NonNull LayoutInflater inflater,
