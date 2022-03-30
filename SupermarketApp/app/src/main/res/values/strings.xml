@@ -3,6 +3,7 @@
     <string name="title_home">Home</string>
     <string name="title_leaflets">Leaflets</string>
     <string name="title_coupons">Coupons</string>
+    <string name="title_qrcard">QR Card</string>
     <string name="chosen_supermarket_textView">Your favourite supermarket is </string>
     <string-array name="leaflets">
         <item>First leaflet - 10/03-16/03
@@ -18,4 +19,20 @@
     <string name="leaflet2_title">Second leaflet - 17/03-23/03</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="google_map_key">AIzaSyBKn184bxiYTBQfbfL2XKAvpVTopdV2FAg</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>

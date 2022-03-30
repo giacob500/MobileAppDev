@@ -1,7 +1,5 @@
 package com.example.supermarketapp;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -20,23 +17,20 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.supermarketapp.databinding.ActivityMainBinding;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
     Button button;
+    FloatingActionButton fab;
     FirebaseFirestore db;
     String fetoAmbizioso;
 
@@ -45,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         fetoAmbizioso = getIntent().getStringExtra("chosenSupermarket");
-
-
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -62,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         button = (Button) findViewById(R.id.choose_supermarket_button);
+        fab = findViewById(R.id.fab);
 
 
         // Initialize Cloud Firestore
@@ -100,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         toast.show();
     }
 
+    /*
     // upload data on database
     public void buttonPressed2(View view) {
         Context context = getApplicationContext();
@@ -131,12 +125,7 @@ public class MainActivity extends AppCompatActivity {
         toast.show();
 
     }
-
-    // check data on database
-    public void buttonPressed3(View view) {
-        Log.d(TAG, "oooo: " + " => " + fetoAmbizioso);
-    }
-
+*/
     public void buttonPressed4(View v) {
         switch(v.getId()) {
             case R.id.choose_supermarket_button:
@@ -147,6 +136,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(myIntent);
                 break;
         }
+    }
+
+    public void fabPressed (View v){
+        // Open qr code
+        Intent myIntent = new Intent();
+        myIntent.setClassName("com.example.supermarketapp", "com.example.supermarketapp.QrCardActivity");
+        // for ex: your package name can be "com.example"
+        // your activity name will be "com.example.Contact_Developer"
+        startActivity(myIntent);
     }
 
     public void activateCoupon(View v){

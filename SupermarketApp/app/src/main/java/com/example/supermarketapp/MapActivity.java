@@ -9,12 +9,14 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -63,6 +65,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         /*binding = ActivityMapBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());*/
+
+        ActionBar actionBar = getSupportActionBar();
+        // showing the back button in action bar
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Assign variable
         selectedSupermarket = "";
@@ -169,6 +175,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private void getCurrentLocation() {
         // Initialize task location
