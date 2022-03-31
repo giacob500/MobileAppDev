@@ -20,6 +20,8 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private TextView textView;
     private String fetoAmbizioso2;
+    Bundle bundle;
+    String updatedText;
     // put at the top under oncreate
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -33,7 +35,7 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-
+        //updatedText = getArguments().getString("chosenSupermarket1");
 /*
         final TextView textView = binding.favouriteSupermarketTextView;
         homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -62,8 +64,9 @@ public class HomeFragment extends Fragment {
             }
         });
         */
-
     }
+
+
 
     @Override
     public void onDestroyView() {

@@ -11,12 +11,15 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.supermarketapp.databinding.ActivityMainBinding;
+import com.example.supermarketapp.ui.home.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
@@ -33,12 +36,14 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton fab;
     FirebaseFirestore db;
     String fetoAmbizioso;
+    Bundle b;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        fetoAmbizioso = getIntent().getStringExtra("chosenSupermarket");
+
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -53,20 +58,39 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
+        /*fetoAmbizioso = "" + getIntent().getStringExtra("chosenSupermarket");
+        b = new Bundle();
+        b.putString("chosenSupermarket", fetoAmbizioso);
+        HomeFragment fragobj = new HomeFragment();
+        fragobj.setArguments(b);
+*/
+
         button = (Button) findViewById(R.id.choose_supermarket_button);
         fab = findViewById(R.id.fab);
 
-
         // Initialize Cloud Firestore
         db = FirebaseFirestore.getInstance();
-
-        Bundle data = new Bundle();
-        data.putString("myData", "Hello from MainActivity");
-        //.setArguments()
     }
+
+    private void loadFragment(HomeFragment fragment) {
+        Bundle bundle = new Bundle();
+        fetoAmbizioso = "" + getIntent().getStringExtra("chosenSupermarket");
+        bundle.putString("chosenSupermarket1", fetoAmbizioso);
+        fragment.setArguments(bundle);
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.nav_host_fragment_container, fragment);
+        fragmentTransaction.commit();
+    }
+
 
     private void showToast(String message){
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void test(View v){
+        HomeFragment fragobj = new HomeFragment();
+        loadFragment(fragobj);
     }
 
     // old attempt for database - DOESN'T WORK
