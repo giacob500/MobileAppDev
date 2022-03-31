@@ -3,6 +3,7 @@ package com.example.supermarketapp.authentication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,9 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.supermarketapp.MainActivity;
 import com.example.supermarketapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -34,9 +35,13 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_user);
 
-        ((AppCompatActivity) this).getSupportActionBar().hide();
+        // Showing the back button in action bar
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        // Show action bar
+        ((AppCompatActivity) this).getSupportActionBar().show();
 
-        // Initialize Firebase Auth
+        // Initialize variables
         mAuth = FirebaseAuth.getInstance();
 
         banner = (TextView) findViewById(R.id.banner);
@@ -52,11 +57,13 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
     }
 
+    // When buttons are clicked
     @Override
     public void onClick(View view) {
         switch (view.getId()){
+            // When banner is clicked go back to login page
             case R.id.banner:
-                startActivity(new Intent(this, MainActivity.class));
+                startActivity(new Intent(this, AuthActivity.class));
                 break;
             case R.id.registerUser:
                 registerUser();
@@ -64,6 +71,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    // Check if credentials respect parameters
     private void registerUser(){
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
@@ -106,7 +114,10 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
+        // Show loading animation
         progressBar.setVisibility(View.VISIBLE);
+
+        // Add user to Firebase database
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -123,7 +134,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
                                         Toast.makeText(RegisterUser.this, "User has been registered successfully!", Toast.LENGTH_LONG).show();
                                         progressBar.setVisibility(View.GONE);
 
-                                        // redirect to login layout
+                                        // Redirect to login layout
                                     } else {
                                         Toast.makeText(RegisterUser.this, "Failed to register! Try again", Toast.LENGTH_LONG).show();
                                         progressBar.setVisibility(View.GONE);
@@ -136,5 +147,16 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
                         }
                     }
                 });
+    }
+
+    // Method to redirect to AuthActivity when back button is pressed
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

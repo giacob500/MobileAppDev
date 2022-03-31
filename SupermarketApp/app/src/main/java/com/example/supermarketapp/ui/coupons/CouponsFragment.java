@@ -20,18 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.supermarketapp.R;
 import com.example.supermarketapp.databinding.FragmentCouponsBinding;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CouponsFragment extends Fragment {
     RecyclerView recyclerView;
-    //Button couponButton;
-    FirebaseStorage firebaseStorage;
-    StorageReference storageReference;
-    StorageReference ref;
     private FragmentCouponsBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -43,12 +37,9 @@ public class CouponsFragment extends Fragment {
         // Show actionbar at the top of the screen
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
 
+        // Initialize variables
         recyclerView = root.findViewById(R.id.coupons_list);
-
-        //couponButton = getActivity().findViewById(R.id.activateCouponButton);
-
-
-        CouponsFragment.MyAdapter myAdapter = new CouponsFragment.MyAdapter(createTestData());
+        CouponsFragment.MyAdapter myAdapter = new CouponsFragment.MyAdapter(createData());
         recyclerView.setAdapter(myAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -61,7 +52,8 @@ public class CouponsFragment extends Fragment {
         binding = null;
     }
 
-    private List<Coupon> createTestData() {
+    // Create coupons data
+    private List<Coupon> createData() {
         ArrayList<Coupon> testdata = new ArrayList<>();
 
         Coupon c1 = new Coupon();
@@ -104,11 +96,11 @@ public class CouponsFragment extends Fragment {
 
         // Model
         private List<Coupon> coupons;
-
         public MyAdapter( List<Coupon> coupons){
             this.coupons = coupons;
         }
 
+        // Create viewholder which recyclerview can reuse
         @NonNull
         @Override
         public CouponsFragment.MyAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -117,6 +109,7 @@ public class CouponsFragment extends Fragment {
             return new CouponsFragment.MyAdapter.MyViewHolder(view);
         }
 
+        // Put coupons data in the carousel
         @Override
         public void onBindViewHolder(@NonNull CouponsFragment.MyAdapter.MyViewHolder holder, int position) {
             System.out.println(position);
@@ -126,13 +119,7 @@ public class CouponsFragment extends Fragment {
             }
             holder.couponExpiration.setText(coupons.get(position).getExpiration());
             holder.couponThumbnail.setImageDrawable(coupons.get(position).getImage());
-            //holder.button.se
-            //holder.myText2.setText(data2[position]);
-            // holder.myImage.setImageResource(images[position]);
-
-            // holder.itemView.setOnClickListener(view -> {
-            //mItemListener.onItemClick(detailsList.get(position)); // this will get the position of our item in recyclerview
-            //});
+            // Change coupon status when button is clicked
             holder.couponButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -155,6 +142,7 @@ public class CouponsFragment extends Fragment {
             return coupons.size();
         }
 
+        // Associate carousel elements with layout elements
         public class MyViewHolder extends RecyclerView.ViewHolder{
 
             TextView couponTitleTxt, couponExpiration;

@@ -50,13 +50,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     //private ActivityMapBinding binding;
     FirebaseFirestore db;
     Spinner spType;
-    String defaultTextForSpinner = "Select supermarket below";
     Button btnSelect;
     SupportMapFragment supportMapFragment;
     GoogleMap map;
     FusedLocationProviderClient fusedLocationProviderClient;
     double currentLat = 0, currentLong = 0;
-    ArrayList<String> placeNameList;
     String selectedSupermarket;
 
 
@@ -68,8 +66,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         /*binding = ActivityMapBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());*/
 
+        // Showing the back button in action bar
         ActionBar actionBar = getSupportActionBar();
-        // showing the back button in action bar
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Assign variable
@@ -81,40 +79,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         supportMapFragment.getMapAsync(this);
 
         // Initialize array of place name
-        placeNameList = new ArrayList<String>();
-
         String[] simpleArray = {"Broughton", "Slateford Road", "Darly Road", "Edinburgh Easter Road", "Leith", "Leven", "Whitburn", "Granton", "Nicolson St"};
 
-// Initialize Cloud Firestore
+        // Initialize Cloud Firestore
         db = FirebaseFirestore.getInstance();
-        /*
-        if (placeNameList.isEmpty()){
-            db.collection("supermarkets")
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Log.d("prova3", placeNameList.toString());
-                                    placeNameList.add((String)document.get("name"));
-                                }
-                            } else {
-                                Log.d(TAG, "Error getting documents: ", task.getException());
-                            }
-                            Log.d("prova3", "FINE: " + placeNameList.toString());
-                        }
-                    });
-        }
-       // Log.d("prova3", "yo");
-// Convert ArrayList<String> in string[]
-        simpleArray = new String[ placeNameList.size() ];
-        placeNameList.toArray( simpleArray );
-        for(int i = 0; i < simpleArray.length; i++){
-            Log.d("prova3", simpleArray[i]);
-        }*/
-       // Log.d("prova3", String.valueOf(simpleArray.length) + " " + placeNameList.size());
-// Set adapter on spinner
+
+        // Set adapter on spinner
         spType.setAdapter(new ArrayAdapter<>(MapActivity.this, android.R.layout.simple_spinner_dropdown_item, simpleArray));
 
         // Initialize fused Location provider client
@@ -131,74 +101,37 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             ActivityCompat.requestPermissions(MapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
         }
 
-/*// Add missing data
-        Map<String, Object> supermarket = new HashMap<>();
-        supermarket.put("name", "Darly Road");
-        supermarket.put("lat", "55.94142632346264");
-        supermarket.put("lng", "-3.221565654074121");
-        supermarket.put("opening_times", "mon:8.00-22.00");
-
-        db.collection("supermarkets_test")
-                .add(supermarket);*/
-
+        // When 'select' button is clicked
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // get selected position of marker
                 int i = spType.getSelectedItemPosition();
-                // Initialize url
-                String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json" +  // Url
-                "?location=" + currentLat + "," + currentLong + // Location latitude and longitude
-                "&radius=5000" + // Nearby radius
-                "&types=" + simpleArray[i] + // Place type
-                "&sensor=true" + // Sensor
-                "&key=" + getResources().getString(R.string.google_map_key); // Google map key
 
                 ArrayAdapter myAdap = (ArrayAdapter) spType.getAdapter(); //cast to an ArrayAdapter
                 int spinnerPosition = myAdap.getPosition(selectedSupermarket);
                 spType.setSelection(spinnerPosition);
-
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra("chosenSupermarket", getString(R.string.chosen_supermarket_textView) + " " + selectedSupermarket);
-/*
-
-                TextView textView = (TextView)v.findViewById(R.id.favouriteSupermarketTextView);
-                textView.setText(getString(R.string.chosen_supermarket_textView) + " " + selectedSupermarket);
-*/
+                // Check if a supermarket has been selected
                 if(selectedSupermarket.equals(""))
                     showToast("No supermarket has been selected");
                 else
-                    showToast(selectedSupermarket + " has been set as favourite");
+                    showToast(selectedSupermarket + " has been set as favourite supermarket");
 
-                Intent intent2 = new Intent(getApplicationContext(), MainActivity.class);// New activity
+                // Close MapActivity and go back to MainActivity
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-                finish(); // Call once you redirect to another activity
-                /*
-                Intent myIntent = new Intent();
-                myIntent.setClassName("com.example.supermarketapp", "com.example.supermarketapp.MainActivity");
-                // for ex: your package name can be "com.example"
-                // your activity name will be "com.example.Contact_Developer"
-                startActivity(myIntent);
-                */
+                finish();
             }
         });
     }
 
+    // Method to show toast message
     private void showToast(String message){
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
+    // Method to get device's current location
     private void getCurrentLocation() {
         // Initialize task location
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
@@ -224,6 +157,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                                 @Override
                                 public boolean onMarkerClick(@NonNull Marker marker) {
+                                    // Set chosen supermarket as the one clicked on the map
                                     selectedSupermarket = marker.getTitle();
                                     return false;
                                 }
@@ -235,6 +169,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
     }
 
+    // Request permission for localization
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -249,7 +184,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-
         // Check if data on Firestore already exist
         db.collection("supermarkets")
                 .get()
@@ -258,7 +192,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                //placeNameList.add((String) document.getData().get("name"));
+                                // Add each supermarket found on database to the map
                                 LatLng supermarket = new LatLng(Double.parseDouble((String) document.getData().get("lat")), Double.parseDouble((String) document.getData().get("lng")));
 
                                 googleMap.addMarker(new MarkerOptions()
@@ -270,38 +204,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         }
                     }
                 });
-
-
-        // [START_EXCLUDE silent]
-        //googleMap.moveCamera(CameraUpdateFactory.newLatLng(supermarket));
     }
 
-    private String downloadUrl(String string) throws IOException {
-        // Initialize url
-        URL url = new URL(string);
-        // Initialize connection
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        // Connect connection
-        connection.connect();
-        // Initialize input stream
-        InputStream stream = connection.getInputStream();
-        // Initialize buffer reader
-        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-        // Initialize string builder
-        StringBuilder builder = new StringBuilder();
-        // Initialize string variable
-        String line = "";
-        // Use while loop
-        while ((line = reader.readLine()) != null){
-            // Append line
-            builder.append(line);
+    // Method to redirect to MainActivity when back button is pressed
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
         }
-        // Get append data
-        String data = builder.toString();
-        // Close reader
-        reader.close();
-        // Return data
-        return data;
+        return super.onOptionsItemSelected(item);
     }
 }
 

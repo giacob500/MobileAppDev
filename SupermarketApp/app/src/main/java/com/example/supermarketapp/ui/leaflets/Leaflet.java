@@ -2,6 +2,7 @@ package com.example.supermarketapp.ui.leaflets;
 
 import android.graphics.drawable.Drawable;
 
+// Class to create leaflet object
 public class Leaflet {
 
     private String title;

@@ -2,6 +2,7 @@ package com.example.supermarketapp.ui.coupons;
 
 import android.graphics.drawable.Drawable;
 
+// Class to create coupon object
 public class Coupon {
     private String title;
     private String expiration;

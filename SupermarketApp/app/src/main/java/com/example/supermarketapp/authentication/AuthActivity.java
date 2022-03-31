@@ -34,8 +34,10 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
 
+        // Hide action bar
         ((AppCompatActivity) this).getSupportActionBar().hide();
 
+        // Initialize variables
         register = (TextView) findViewById(R.id.register);
         register.setOnClickListener(this);
 
@@ -50,19 +52,21 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
         mAuth = FirebaseAuth.getInstance();
     }
 
+    // When the buttons are clicked
     @Override
     public void onClick(View view) {
         switch(view.getId()){
+            // Open registration screen
             case R.id.register:
                 startActivity(new Intent(this, RegisterUser.class));
                 break;
-
             case R.id.signIn:
                 userLogin();
                 break;
         }
     }
 
+    // Check if credentials respect parameters
     private void userLogin() {
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
@@ -91,15 +95,13 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        progressBar.setVisibility(View.VISIBLE);
-
+        // Check credentials validity and if user is registered on firebase database
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                   // redirect to home page
+                   // Redirect to home page
                     startActivity(new Intent(AuthActivity.this, MainActivity.class));
-
                 } else {
                     Toast.makeText(AuthActivity.this, "Failed to login! Please check your credentials", Toast.LENGTH_LONG).show();
                 }

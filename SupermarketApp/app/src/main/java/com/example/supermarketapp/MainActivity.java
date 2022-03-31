@@ -1,14 +1,9 @@
 package com.example.supermarketapp;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -22,28 +17,20 @@ import com.example.supermarketapp.databinding.ActivityMainBinding;
 import com.example.supermarketapp.ui.home.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-
     Button button;
     FloatingActionButton fab;
     FirebaseFirestore db;
     String fetoAmbizioso;
     Bundle b;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -57,13 +44,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
-
-        /*fetoAmbizioso = "" + getIntent().getStringExtra("chosenSupermarket");
-        b = new Bundle();
-        b.putString("chosenSupermarket", fetoAmbizioso);
-        HomeFragment fragobj = new HomeFragment();
-        fragobj.setArguments(b);
-*/
 
         button = (Button) findViewById(R.id.choose_supermarket_button);
         fab = findViewById(R.id.fab);
@@ -83,73 +63,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-
-    private void showToast(String message){
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    public void test(View v){
-        HomeFragment fragobj = new HomeFragment();
-        loadFragment(fragobj);
-    }
-
-    // old attempt for database - DOESN'T WORK
-    public void buttonPressed(View view) {
-        Context context = getApplicationContext();
-        CharSequence text = "Data uploaded";
-        int duration = Toast.LENGTH_SHORT;
-
-        // Write a message to the database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("message");
-        myRef.setValue("Hello, World!");
-       /*
-       SUGGESTED FROM THE INDIAN GUY TUTORIAL
-       //connect to database
-        FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
-        DatabaseReference reference = rootNode.getReference("supermarkets");
-
-        //populate database
-        SupermarketsHelperClass supermarket = new SupermarketsHelperClass("1", "Darly Road", "55.9415415332603, -3.2215872512215684", "mon:8.00-22.00");
-        reference.child("1").setValue(supermarket);*/
-
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
-    }
-
-    /*
-    // upload data on database
-    public void buttonPressed2(View view) {
-        Context context = getApplicationContext();
-        CharSequence text = "Data uploaded";
-        int duration = Toast.LENGTH_SHORT;
-
-        // Create a new user with a first and last name
-        Map<String, Object> user = new HashMap<>();
-        user.put("first", "Ada");
-        user.put("last", "Lovelace");
-        user.put("born", 1815);
-
-        // Add a new document with a generated ID
-        db.collection("users")
-                .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
-
-    }
-*/
     public void buttonPressed4(View v) {
         switch(v.getId()) {
             case R.id.choose_supermarket_button:
@@ -170,24 +83,5 @@ public class MainActivity extends AppCompatActivity {
         // your activity name will be "com.example.Contact_Developer"
         startActivity(myIntent);
     }
-
-    public void activateCoupon(View v){
-        Button activateCouponButton = (Button) findViewById(R.id.activateCouponButton);
-        if(activateCouponButton.getText().equals("Activate"))
-            activateCouponButton.setText("Activated");
-        else
-            activateCouponButton.setText("Activate");
-        Log.d("prova5", "funzia");
-
-    }
-
-    public void downloadPDF1(View view) {
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/storage/emulated/0/Download/sample.pdf");
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(file), "application/pdf");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(intent);
-    }
-
 
 }

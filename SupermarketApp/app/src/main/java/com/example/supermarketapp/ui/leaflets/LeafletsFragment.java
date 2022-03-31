@@ -31,11 +31,9 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class LeafletsFragment extends Fragment {
 
     private FragmentLeafletsBinding binding;
-
     RecyclerView recyclerView;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
@@ -50,8 +48,8 @@ public class LeafletsFragment extends Fragment {
         // Show actionbar at the top of the screen
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
 
+        // Initialize variables
         recyclerView = root.findViewById(R.id.leaflets_list);
-
         MyAdapter myAdapter = new MyAdapter(createTestData());
         recyclerView.setAdapter(myAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -59,6 +57,7 @@ public class LeafletsFragment extends Fragment {
         return root;
     }
 
+    // Create leaflets data
     private List<Leaflet> createTestData() {
         ArrayList<Leaflet> testdata = new ArrayList<>();
 
@@ -77,21 +76,8 @@ public class LeafletsFragment extends Fragment {
         drawable = getResources().getDrawable(R.drawable.second_leaflet);
         l2.setImage(drawable);
         testdata.add(l2);
-/*
-        // Code to use for undefined number of leaflets
-        Leaflet lSample = new Leaflet();
-        Drawable drawable;
 
-        for (int i = 0; i < 2; i++) {
-            lSample.setTitle("Date");
-            lSample.setDescription("Description");
-            drawable = getResources().getDrawable(R.drawable.first_leaflet);
-            lSample.setImage(drawable);
-            testdata.add(lSample);
-        }
-*/
         return testdata;
-
     }
 
     @Override
@@ -104,7 +90,6 @@ public class LeafletsFragment extends Fragment {
 
         // Model
         private List<Leaflet> leaflets;
-
         public MyAdapter( List<Leaflet> leaflets){
             this.leaflets = leaflets;
         }
@@ -117,23 +102,18 @@ public class LeafletsFragment extends Fragment {
             return new MyViewHolder(view);
         }
 
+        // Put leaflets data in the carousel
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             System.out.println(position);
             holder.leafletTitle.setText(leaflets.get(position).getTitle());
             holder.leafletDescription.setText(leaflets.get(position).getDescription());
             holder.leafletThumbnail.setImageDrawable(leaflets.get(position).getImage());
-            //holder.myText2.setText(data2[position]);
-           // holder.myImage.setImageResource(images[position]);
-
-           // holder.itemView.setOnClickListener(view -> {
-                //mItemListener.onItemClick(detailsList.get(position)); // this will get the position of our item in recyclerview
-            //});
+            // Download pdf when leaflet is clicked
             holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     storageReference = firebaseStorage.getInstance().getReference();
-                    //ref = storageReference.child("leaflets/" + leaflets.get(position).getTitle() + ".pdf");
                     ref = storageReference.child("leaflets/10-03-16-03.pdf");
                     ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
@@ -157,6 +137,7 @@ public class LeafletsFragment extends Fragment {
             return leaflets.size();
         }
 
+        // Associate carousel elements with layout elements
         public class MyViewHolder extends RecyclerView.ViewHolder{
 
             TextView leafletTitle, leafletDescription;
@@ -172,6 +153,7 @@ public class LeafletsFragment extends Fragment {
             }
         }
 
+        // Method to download from web url and save in device's filesystem
         public void downloadFile(Context context, String fileName, String fileExtension, String destinationDirectory, String url){
             DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
             Uri uri = Uri.parse(url);
