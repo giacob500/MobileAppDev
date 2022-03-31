@@ -1,4 +1,4 @@
-package com.example.supermarketapp;
+package com.example.supermarketapp.authentication;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,12 +13,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.supermarketapp.MainActivity;
+import com.example.supermarketapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class AuthApp extends AppCompatActivity implements View.OnClickListener{
+public class AuthActivity extends AppCompatActivity implements View.OnClickListener{
 
     private TextView register;
     private EditText editTextEmail, editTextPassword;
@@ -30,7 +32,7 @@ public class AuthApp extends AppCompatActivity implements View.OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_auth_app);
+        setContentView(R.layout.activity_auth);
 
         ((AppCompatActivity) this).getSupportActionBar().hide();
 
@@ -96,10 +98,10 @@ public class AuthApp extends AppCompatActivity implements View.OnClickListener{
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                    // redirect to home page
-                    startActivity(new Intent(AuthApp.this, MainActivity.class));
+                    startActivity(new Intent(AuthActivity.this, MainActivity.class));
 
                 } else {
-                    Toast.makeText(AuthApp.this, "Failed to login! Please check your credentials", Toast.LENGTH_LONG).show();
+                    Toast.makeText(AuthActivity.this, "Failed to login! Please check your credentials", Toast.LENGTH_LONG).show();
                 }
             }
         });

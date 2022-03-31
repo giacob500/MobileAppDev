@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -155,10 +157,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 ArrayAdapter myAdap = (ArrayAdapter) spType.getAdapter(); //cast to an ArrayAdapter
                 int spinnerPosition = myAdap.getPosition(selectedSupermarket);
                 spType.setSelection(spinnerPosition);
-                //dioboiaseiqui
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("chosenSupermarket", getString(R.string.chosen_supermarket_textView) + " " + selectedSupermarket);
+/*
+
+                TextView textView = (TextView)v.findViewById(R.id.favouriteSupermarketTextView);
+                textView.setText(getString(R.string.chosen_supermarket_textView) + " " + selectedSupermarket);
+*/
+                if(selectedSupermarket.equals(""))
+                    showToast("No supermarket has been selected");
+                else
+                    showToast(selectedSupermarket + " has been set as favourite");
 
                 Intent intent2 = new Intent(getApplicationContext(), MainActivity.class);// New activity
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -173,6 +183,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 */
             }
         });
+    }
+
+    private void showToast(String message){
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

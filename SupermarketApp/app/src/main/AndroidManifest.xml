@@ -16,15 +16,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SupermarketApp">
+
         <activity
-            android:name=".ProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".RegisterUser"
+            android:name=".authentication.RegisterUser"
             android:exported="false"
             android:label="@string/title_register"/>
         <activity
-            android:name=".AuthApp"
+            android:name=".authentication.AuthActivity"
             android:exported="true"
             android:label="@string/title_login"
             >
@@ -38,10 +36,6 @@
             android:name=".QrCardActivity"
             android:exported="false"
             android:label="@string/title_qrcard" />
-        <activity
-            android:name=".SettingsActivity"
-            android:exported="false"
-            android:label="@string/title_activity_settings" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

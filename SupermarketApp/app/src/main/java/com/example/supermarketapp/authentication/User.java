@@ -1,4 +1,4 @@
-package com.example.supermarketapp;
+package com.example.supermarketapp.authentication;
 
 public class User {
     public String fullName, age, email;
